@@ -1,0 +1,4 @@
+site_name: Actions Service
+theme: readthedocs
+site_dir: ../public/actions/docs
+repo_url: https://github.com/bark-iot/action-service/

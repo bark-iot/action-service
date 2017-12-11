@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+require 'thor'
+
+class MyCLI < Thor
+  desc 'db_migrate [VERSION]', 'Migrate to VERSION or latest'
+  def db_migrate(version = nil)
+    require 'logger'
+    require 'sequel'
+    Sequel.extension :migration
+    db = Sequel.connect(adapter: 'postgres', host: 'db', database: ENV['POSTGRES_DB'], user: ENV['POSTGRES_USER'], password: ENV['POSTGRES_PASSWORD'])
+    db.logger = Logger.new($stdout)
+    if version
+      puts "Migrating to version #{version}"
+      Sequel::Migrator.run(db, File.join(File.dirname(__FILE__), 'migrations'), target: version.to_i, allow_missing_migration_files: true)
+    else
+      puts 'Migrating to latest'
+      Sequel::Migrator.run(db, File.join(File.dirname(__FILE__), 'migrations'), allow_missing_migration_files: true)
+    end
+  end
+end
+
+MyCLI.start(ARGV)
