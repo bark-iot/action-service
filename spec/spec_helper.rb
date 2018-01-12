@@ -3,6 +3,7 @@ require 'rspec'
 require 'pry'
 require 'webmock/rspec'
 
+$VERBOSE = nil
 ENV['RACK_ENV'] = 'test'
 WebMock.disable_net_connect!(allow_localhost: true)
 

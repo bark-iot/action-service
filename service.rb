@@ -11,8 +11,8 @@ set :bind, '0.0.0.0'
 set :port, 80
 set :public_folder, 'public'
 
-get '/devices/docs' do
-  redirect '/devices/docs/index.html'
+get '/actions/docs' do
+  redirect '/actions/docs/index.html'
 end
 
 namespace '/houses/:house_id/devices/:device_id' do
