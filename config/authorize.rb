@@ -1,4 +1,4 @@
-before '/houses/:house_id/devices/:device_id/*' do
+before %w(/houses/:house_id/devices/:device_id/* /houses/:house_id/actions/:id/validate) do
   result = User::Get.(authorization_header: request.env['HTTP_AUTHORIZATION'].to_s)
   if result.success?
     USER = result['model']
@@ -7,7 +7,9 @@ before '/houses/:house_id/devices/:device_id/*' do
     LOGGER.info "Unable to authorize user with header #{request.env['HTTP_AUTHORIZATION'].to_s}"
     halt 401
   end
+end
 
+before '/houses/:house_id/devices/:device_id/*' do
   result = House::Get.(id: params[:house_id], authorization_header: request.env['HTTP_AUTHORIZATION'].to_s)
   if result.success? && result['model']['user_id'] == USER['id']
     HOUSE = result['model']

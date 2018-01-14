@@ -15,6 +15,20 @@ get '/actions/docs' do
   redirect '/actions/docs/index.html'
 end
 
+get '/houses/:house_id/actions/:id/validate' do
+  result = Action::ValidateHouseId.(params.merge(authorization_header: request.env['HTTP_AUTHORIZATION'].to_s))
+  if result.success?
+    body Action::Representer.new(result['model']).to_json
+  else
+    if result['contract.default'] && result['contract.default'].errors.messages.size > 0
+      status 422
+      body result['contract.default'].errors.messages.uniq.to_json
+    else
+      status 404
+    end
+  end
+end
+
 namespace '/houses/:house_id/devices/:device_id' do
   get '/actions' do
     result = Action::List.(device_id: params[:device_id])

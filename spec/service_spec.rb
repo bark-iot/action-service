@@ -18,6 +18,9 @@ describe 'Devices Service' do
     stub_request(:get, 'http://lb/houses/1/devices/1').
         with(headers: {'Authorization'=>"Bearer #{token}"}).
         to_return(status: 200, body: '{"id": 1,"house_id": 1,"title": "MyDevice","com_type": 0,"token": "2d931510-d99f-494a-8c67-87feb05e1594","online":false,"approved_at": "2017-11-11 11:04:44 UTC","created_at": "2017-11-11 11:04:44 UTC","updated_at": "2017-1-11 11:04:44 UTC"}', headers: {})
+    stub_request(:get, 'http://lb/houses/2/devices/1').
+        with(headers: {'Authorization'=>"Bearer #{token}"}).
+        to_return(status: 404, body: '', headers: {})
   end
 
   #TODO: add delete device test
@@ -163,6 +166,23 @@ describe 'Devices Service' do
     delete "/houses/1/devices/1/actions/#{action.id}"
 
     expect(last_response.status).to equal(401)
+  end
+
+  it 'should validate correct house id' do
+    header 'Authorization', "Bearer #{token}"
+    get "/houses/1/actions/#{action.id}/validate"
+
+    expect(last_response).to be_ok
+    body = JSON.parse(last_response.body)
+    expect(body['title']).to eql('MyAction')
+    expect(body['key']).to eql('my_action')
+  end
+
+  it 'should fail not valid house id' do
+    header 'Authorization', "Bearer #{token}"
+    get "/houses/2/actions/#{action.id}/validate"
+
+    expect(last_response.status).to equal(404)
   end
 
   def token
