@@ -16,6 +16,16 @@ get '/actions/docs' do
   redirect '/actions/docs/index.html'
 end
 
+get '/actions/system' do
+  result = SystemAction::List.()
+  if result.success?
+    body Action::Representer.for_collection.new(result['models']).to_json
+  else
+    status 422
+    body result['contract.default'].errors.messages.uniq.to_json
+  end
+end
+
 get '/houses/:house_id/actions/:id/validate' do
   result = Action::ValidateHouseId.(params.merge(authorization_header: request.env['HTTP_AUTHORIZATION'].to_s))
   if result.success?

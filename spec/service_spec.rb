@@ -25,6 +25,23 @@ describe 'Devices Service' do
 
   #TODO: add delete device test
 
+  it 'should list all system actions' do
+    action_title = system_action.title
+    header 'Authorization', "Bearer #{token}"
+    get 'actions/system'
+
+    expect(last_response).to be_ok
+    body = JSON.parse(last_response.body)
+    expect(body[0]['title'] == action_title).to be_truthy
+  end
+
+  it 'should not list all system actions for user with wrong token' do
+    header 'Authorization', 'Bearer wrong_token'
+    get 'actions/system'
+
+    expect(last_response.status).to equal(401)
+  end
+
   it 'should show action' do
     header 'Authorization', "Bearer #{token}"
     get "/houses/1/devices/1/actions/#{action.id}"
@@ -191,5 +208,9 @@ describe 'Devices Service' do
 
   def action
     Action::Create.(title: 'MyAction', key: 'my_action', device_id: 1, input: '[{"key":"temp","type":"int"}]')['model']
+  end
+
+  def system_action
+    SystemAction::Create.(title: 'SendHTTP', key: 'send_http', input: '[{"key":"method","type":"string"},{"key":"body","type":"string"},{"key":"url","type":"string"}]')['model']
   end
 end

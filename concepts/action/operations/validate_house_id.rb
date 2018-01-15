@@ -31,12 +31,14 @@ class Action < Sequel::Model(DB)
     end
 
     def get_device(options, params:, **)
+      return true if options['model'].type == Action::Types['system']
       result = Device::Get.(id: options['model'].device_id, house_id: params[:house_id], authorization_header: params[:authorization_header])
       options['device'] = result['model']
       result.success?
     end
 
     def validate_action(options, params:, **)
+      return true if options['model'].type == Action::Types['system']
       options['device']['house_id'] == params[:house_id].to_i
     end
 

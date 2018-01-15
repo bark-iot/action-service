@@ -1,4 +1,4 @@
-before %w(/houses/:house_id/devices/:device_id/* /houses/:house_id/actions/:id/validate) do
+before %w(/actions/system /houses/:house_id/devices/:device_id/* /houses/:house_id/actions/:id/validate) do
   result = User::Get.(authorization_header: request.env['HTTP_AUTHORIZATION'].to_s)
   if result.success?
     USER = result['model']

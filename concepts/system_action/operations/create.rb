@@ -1,6 +1,6 @@
 require 'securerandom'
 
-class Action < Sequel::Model(DB)
+class SystemAction
   class Create < Trailblazer::Operation
     extend Contract::DSL
 
@@ -14,7 +14,6 @@ class Action < Sequel::Model(DB)
     failure  :log_failure
 
     contract do
-      property :device_id
       property :title
       property :key
       property :input
@@ -22,14 +21,12 @@ class Action < Sequel::Model(DB)
       validation do
         configure do
           config.messages_file = 'config/error_messages.yml'
-          option :form
 
           def unique_key?(value)
-            Action.where(key: value).where(device_id: form.device_id).first.nil?
+            Action.where(key: value).where(device_id: nil).first.nil?
           end
         end
 
-        required(:device_id).filled
         required(:title).filled
         required(:key).filled
         rule(key: [:key]) do |key|
@@ -45,15 +42,15 @@ class Action < Sequel::Model(DB)
     end
 
     def set_type(options, model:, **)
-      model.type = Action::Types['device']
+      model.type = Action::Types['system']
     end
 
     def log_success(options, params:, model:, **)
-      LOGGER.info "[#{self.class}] Created action with params #{params.to_json}. Action: #{Action::Representer.new(model).to_json}"
+      LOGGER.info "[#{self.class}] Created system action with params #{params.to_json}. Action: #{Action::Representer.new(model).to_json}"
     end
 
     def log_failure(options, params:, **)
-      LOGGER.info "[#{self.class}] Failed to create action with params #{params.to_json}"
+      LOGGER.info "[#{self.class}] Failed to create system action with params #{params.to_json}"
     end
   end
 end

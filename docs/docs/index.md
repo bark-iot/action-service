@@ -27,6 +27,7 @@ device_id    | required
   "device_id": 1,
   "title": "MyAction",
   "key": "my_action",
+  "type": 1,
   "input": "[{\"key\":\"temp\",\"type\":\"int\"}]",
   "created_at": "2017-11-11 11:04:44 UTC",
   "updated_at": "2017-1-11 11:04:44 UTC"
@@ -34,6 +35,7 @@ device_id    | required
 ```
 
 `input` is json encoded field listing data keys and types sent with action.
+`type` 0 is system action, 1 is device action.
 
 *Error Response [401]*
 
@@ -64,6 +66,7 @@ house_id     | required
   "device_id": 1,
   "title": "MyAction",
   "key": "my_action",
+  "type": 1,
   "input": "[{\"key\":\"temp\",\"type\":\"int\"}]",
   "created_at": "2017-11-11 11:04:44 UTC",
   "updated_at": "2017-1-11 11:04:44 UTC"
@@ -71,6 +74,7 @@ house_id     | required
 ```
 
 `input` is json encoded field listing data keys and types sent with action.
+`type` 0 is system action, 1 is device action.
 
 *Error Response [401]*
 
@@ -108,6 +112,7 @@ key           | required
   "device_id": 1,
   "title": "MyAction",
   "key": "my_action",
+  "type": 1,
   "input": "[{\"key\":\"temp\",\"type\":\"int\"}]",
   "created_at": "2017-11-11 11:04:44 UTC",
   "updated_at": "2017-1-11 11:04:44 UTC"
@@ -115,6 +120,7 @@ key           | required
 ```
 
 `input` is json encoded field listing data keys and types sent with action.
+`type` 0 is system action, 1 is device action.
 
 *Error Response [422]*
 
@@ -158,11 +164,15 @@ title         | required
   "device_id": 1,
   "title": "MyAction",
   "key": "my_action",
+  "type": 1,
   "input": "[{\"key\":\"temp\",\"type\":\"int\"}]",
   "created_at": "2017-11-11 11:04:44 UTC",
   "updated_at": "2017-1-11 11:04:44 UTC"
 }
 ```
+
+`input` is json encoded field listing data keys and types sent with action.
+`type` 0 is system action, 1 is device action.
 
 *Error Response [422]*
 
@@ -196,12 +206,44 @@ device_id    | required
       "device_id": 1,
       "title": "MyAction",
       "key": "my_action",
+      "type": 1,
       "input": "[{\"key\":\"temp\",\"type\":\"int\"}]",
       "created_at": "2017-11-11 11:04:44 UTC",
       "updated_at": "2017-1-11 11:04:44 UTC"
     }
 ]
 ```
+
+`input` is json encoded field listing data keys and types sent with action.
+`type` 0 is system action, 1 is device action.
+
+*Error Response [401]*
+
+No token provided
+
+## List System Actions
+
+GET `/actions/system`
+
+*Response [200]*
+
+```json
+[
+    {
+      "id": 1,
+      "device_id": 1,
+      "title": "MyAction",
+      "key": "my_action",
+      "type": 0,
+      "input": "[{\"key\":\"temp\",\"type\":\"int\"}]",
+      "created_at": "2017-11-11 11:04:44 UTC",
+      "updated_at": "2017-1-11 11:04:44 UTC"
+    }
+]
+```
+
+`input` is json encoded field listing data keys and types sent with action.
+`type` 0 is system action, 1 is device action.
 
 *Error Response [401]*
 
