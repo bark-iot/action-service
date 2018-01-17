@@ -7,7 +7,6 @@ end
 
 require './config/logging.rb'
 require './config/database.rb'
-require './config/concepts.rb'
 
 class MyCLI < Thor
   desc 'db_migrate [VERSION]', 'Migrate to VERSION or latest'
@@ -25,6 +24,7 @@ class MyCLI < Thor
 
   desc 'db_seed', 'Seed system actions to DB'
   def db_seed
+    require './config/concepts.rb'
     SystemAction::Create.(title: 'SendHTTP', key: 'send_http', input: '[{"key":"method","type":"string"},{"key":"body","type":"string"},{"key":"url","type":"string"}]')
     puts 'Created Periodic Trigger'
   end
