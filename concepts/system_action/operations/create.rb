@@ -1,4 +1,5 @@
 require 'securerandom'
+require_relative '../../action/operations/create'
 
 class SystemAction
   class Create < Trailblazer::Operation
